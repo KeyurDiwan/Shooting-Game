@@ -3,6 +3,8 @@ const canvas = document.createElement("canvas");
 const lightWeaponDamage = 10;
 const heavyWeaponDamage = 20;
 const LargeWeaponDamage = 50;
+let playerScore = 0;
+
 document.querySelector(".myGame").appendChild(canvas);
 
 canvas.width = innerWidth;
@@ -311,6 +313,7 @@ function animation() {
     }
     //
 
+    //   generting large weapons
     largeWeapons.forEach((largeWeapon) => {
       // find the distance largeWeapon and enemy
 
@@ -320,6 +323,10 @@ function animation() {
         distanceBetweenLargeWeaponAndEnemy <= 200 &&
         distanceBetweenLargeWeaponAndEnemy >= -200
       ) {
+            // increasing the score
+          playerScore += 10;
+        //    rendering the score in html
+          scoreBoard.innerHTML = `Score: ${playerScore}`
         setTimeout(() => {
           enemies.splice(enemyIndex, 1);
 
@@ -329,6 +336,9 @@ function animation() {
         enemies.splice(enemyIndex, 1);
       }
     });
+    //   console.log(playerScore)
+      
+    //   generating weapons
     weapons.forEach((weapon, weaponIndex) => {
       //    finding the distance between weapon and enemy
       const distanceBetweenWeaponAndEnemy = Math.hypot(
@@ -361,7 +371,11 @@ function animation() {
               })
             );
           }
+        //    increasing score 
+            playerScore += 10;
 
+            //  rendaring player score in scorebord html element
+            scoreBoard.innerHTML = `Score: ${playerScore}`
           setTimeout(() => {
             enemies.splice(enemyIndex, 1);
 
@@ -405,6 +419,14 @@ canvas.addEventListener("click", (e) => {
 canvas.addEventListener("contextmenu", (e) => {
   e.preventDefault();
 
+    if (playerScore <= 0) {
+        return;
+    }
+    // Decrering the player score
+    playerScore -= 2;
+
+    // updating player score in html
+    scoreBoard.innerHTML = `Score: ${playerScore}`
   const myAngle = Math.atan2(
     e.clientY - canvas.height / 2,
     e.clientX - canvas.width / 2
@@ -429,8 +451,16 @@ canvas.addEventListener("contextmenu", (e) => {
 });
 
 addEventListener("keypress", (e) => {
-  if (e.key === " ") {
-    console.log("Enter key pressed");
+    if (e.key === " ") {
+        if (playerScore < 25) {
+            return;
+        }
+        // Decrering the player score
+        playerScore -= 25;
+    
+        // updating player score in html
+        scoreBoard.innerHTML = `Score: ${playerScore}`
+    // console.log("Enter key pressed");
     largeWeapons.push(new LargeWeapon(0, 0, LargeWeaponDamage));
   }
 });
