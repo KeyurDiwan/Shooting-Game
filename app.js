@@ -63,7 +63,19 @@ const gameOverLoader = () => {
     highScore.innerText = `High Score: ${localStorage.getItem("highScore") ?
             localStorage.getItem("highScore") :
             playerScore
-    }`;
+        }`;
+    
+    const oldHighScore =
+        localStorage.getItem("highScore") &&
+        localStorage.getItem("highScore");
+    if (oldHighScore < playerScore) {
+        localStorage.setItem("highScore", playerScore);
+    }
+
+    // updating high score
+    highScore.innerText = `High Score: ${playerScore}`;
+    
+    
     // adding text to playagain button
 
     gameOverBtn.innerText = "Play Again";
@@ -503,7 +515,9 @@ addEventListener("contextmenu", (e) => {
     e.preventDefault();
 });
 
-
+addEventListener("resize", () => {
+    window.location.reload();
+})
 // console.log(`key: ${e.key}`)
 
 animation();
