@@ -51,6 +51,37 @@ document.querySelector("input").addEventListener("click", (e) => {
   }
 });
 
+
+// ---------end screen------
+const gameOverLoader = () => {
+        // creating end screen div and play again and high score elements
+    
+    const gameOverBanner = document.createElement('div');
+    const gameOverBtn = document.createElement('button');
+    const highScore = document.createElement('div');
+
+    highScore.innerText = `High Score: ${localStorage.getItem("highScore") ?
+            localStorage.getItem("highScore") :
+            playerScore
+    }`;
+    // adding text to playagain button
+
+    gameOverBtn.innerText = "Play Again";
+
+    gameOverBanner.appendChild(highScore);
+    gameOverBanner.appendChild(gameOverBtn);
+
+    gameOverBtn.onclick = () => {
+        window.location.reload();
+    };
+
+    gameOverBanner.classList.add("gameover"); 
+
+    document.querySelector("body").appendChild(gameOverBanner);
+
+}
+
+
 // ------------------
 
 playerPosition = {
@@ -261,6 +292,8 @@ let animationId;
 function animation() {
   animationId = requestAnimationFrame(animation);
 
+    scoreBoard.innerHTML = `Score: ${playerScore}`
+
   context.fillStyle = "rgba(0,0,0,0.2)";
   context.fillRect(0, 0, canvas.width, canvas.height);
   // context.clearRect
@@ -308,7 +341,8 @@ function animation() {
     );
 
     if (distanceBetweenPlayerAndEnemy - a.radius - enemy.radius < 1) {
-      cancelAnimationFrame(animationId);
+        cancelAnimationFrame(animationId);
+        return gameOverLoader();
       // console.log("Game Over..!")
     }
     //
@@ -464,6 +498,11 @@ addEventListener("keypress", (e) => {
     largeWeapons.push(new LargeWeapon(0, 0, LargeWeaponDamage));
   }
 });
+
+addEventListener("contextmenu", (e) => {
+    e.preventDefault();
+});
+
 
 // console.log(`key: ${e.key}`)
 
