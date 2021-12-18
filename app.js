@@ -1,3 +1,18 @@
+//  Importing souud effect..!
+
+const introMusic = new Audio("./music/introSong.mp3");
+const shootingSound = new Audio("./music/shoooting.mp3");
+const killEnemySound = new Audio("./music/killEnemy.mp3");
+const gameOverSound = new Audio("./music/gameOver.mp3");
+const heavyWeaponSound = new Audio("./music/heavyWeapon.mp3");
+const hugeWeaponSound = new Audio("./music/hugeWeapon.mp3");
+
+// start music 
+ introMusic.play(); 
+
+
+
+
 // basics environment setup
 const canvas = document.createElement("canvas");
 const lightWeaponDamage = 10;
@@ -23,6 +38,8 @@ const scoreBoard = document.querySelector(".scoreBoard");
 document.querySelector("input").addEventListener("click", (e) => {
   e.preventDefault();
 
+    // stoping music 
+    introMusic.pause();
   // making form invisible
   form.style.display = "none";
   // making scoreBoard visible
@@ -69,11 +86,13 @@ const gameOverLoader = () => {
         localStorage.getItem("highScore") &&
         localStorage.getItem("highScore");
     if (oldHighScore < playerScore) {
+        // oldHighScore = playerScore;
         localStorage.setItem("highScore", playerScore);
+        highScore.innerText = `High Score: ${playerScore}`;
     }
 
     // updating high score
-    highScore.innerText = `High Score: ${playerScore}`;
+  
     
     
     // adding text to playagain button
@@ -354,6 +373,7 @@ function animation() {
 
     if (distanceBetweenPlayerAndEnemy - a.radius - enemy.radius < 1) {
         cancelAnimationFrame(animationId);
+        gameOverSound.play();
         return gameOverLoader();
       // console.log("Game Over..!")
     }
@@ -373,7 +393,8 @@ function animation() {
           playerScore += 10;
         //    rendering the score in html
           scoreBoard.innerHTML = `Score: ${playerScore}`
-        setTimeout(() => {
+          setTimeout(() => {
+          killEnemySound.play();
           enemies.splice(enemyIndex, 1);
 
           // weapons.splice(weaponIndex, 1);
@@ -422,7 +443,9 @@ function animation() {
 
             //  rendaring player score in scorebord html element
             scoreBoard.innerHTML = `Score: ${playerScore}`
-          setTimeout(() => {
+           
+            setTimeout(() => {
+            killEnemySound.play();
             enemies.splice(enemyIndex, 1);
 
             weapons.splice(weaponIndex, 1);
@@ -438,6 +461,7 @@ function animation() {
 //  ------------- Adding eventListener --------------------------------
 
 canvas.addEventListener("click", (e) => {
+    shootingSound.play();
   const myAngle = Math.atan2(
     e.clientY - canvas.height / 2,
     e.clientX - canvas.width / 2
@@ -465,9 +489,11 @@ canvas.addEventListener("click", (e) => {
 canvas.addEventListener("contextmenu", (e) => {
   e.preventDefault();
 
+   
     if (playerScore <= 0) {
         return;
     }
+    heavyWeaponSound.play();
     // Decrering the player score
     playerScore -= 2;
 
@@ -497,10 +523,12 @@ canvas.addEventListener("contextmenu", (e) => {
 });
 
 addEventListener("keypress", (e) => {
+   
     if (e.key === " ") {
         if (playerScore < 25) {
             return;
         }
+        hugeWeaponSound.play();
         // Decrering the player score
         playerScore -= 25;
     
